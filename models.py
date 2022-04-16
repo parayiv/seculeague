@@ -1,17 +1,20 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import secrets
 
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
 
 #SqlAlchemy Database Configuration With Mysql
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://parayiv:gaga@192.168.80.6/SECULEAGUE'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://parayiv:gaga@192.168.80.6/sldb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
 db = SQLAlchemy(app)
 
 #Creating model table for our CRUD database
-class RULES(db.Model):
+class qradar(db.Model):
+    id = db.Column(db.Integer)
     qr_id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100))
     TYPE = db.Column(db.String(10))
@@ -23,19 +26,24 @@ class RULES(db.Model):
     modification_date = db.Column(db.String(100))
 
 
-    def __init__(self, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date):
-        self.qr_id = qr_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'qr_id': self.qr_id,
+            'name' : self.name,
+            'TYPE' : self.TYPE,
+            'enabled': self.enabled,
+            'owner': self.owner,
+            'identifier': self.identifier,
+            'origin': self.origin,
+            'creation_date': self.creation_date,
+            'modification_date': self.modification_date       
+        }
+
+"""       
 #Creating model table for our CRUD database
 class SECU(db.Model):
-    sl_id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100))
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
@@ -47,7 +55,7 @@ class SECU(db.Model):
 
 
     def __init__(self, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date):
-        self.sl_id = sl_id
+        self.id = id
         self.name = name
         self.TYPE = TYPE
         self.enabled = enabled
@@ -78,3 +86,5 @@ class newUC(db.Model):
         self.origin = origin
         self.creation_date = creation_date
         self.modification_date = modification_date
+
+        """
