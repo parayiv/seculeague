@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+    <!-- Style -->
+    <link rel="stylesheet"href="{{ url_for('static', filename='css/style.css') }}"">
+
+    <!-- DATATABLES -->
+    <link href='https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css' rel='stylesheet' type='text/css'>
+
+    <title>SECULEAGUE USE CASE MANAGER</title>
+
+    <style>
+        table {
+            font-size: 0.9em;
+            font-family: 'Open Sans';
+        }
+
+        th {
+            background: rgb(120, 176, 212);
+            position: sticky;
+            top: 3.8rem;
+            /* Don't forget this, required for the stickiness */
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+        }
+
+        tbody {
+            background-color: #e9f6fc;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+
+
+    <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
+
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-6 col-xl-2">
+                    <h1 class="mb-0 site-logo"><a href="index.html">Brand<span class="text-primary">.</span> </a></h1>
+                </div>
+
+                <div class="col-12 col-md-10 d-none d-xl-block">
+                    <nav class="site-navigation position-relative text-right" role="navigation">
+
+                        <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                            <li><a href="#home" class="nav-link">Home</a></li>
+                            <li><a href="/qradar" class="nav-link">Qradar</a></li>
+                            <li><a href="#pull_qr" class="nav-link">Pull QR</a></li>
+                            <li><a href="#Seculeague" class="nav-link">Seculeague</a></li>
+                            <li><a href="#history" class="nav-link">History</a></li>
+                            <li><a href="#about" class="nav-link">About</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    </br>
+    <div class="container">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem;">
+            <div class="col md-10 ml-md-auto">
+
+                <div>
+
+                    <table class="table table-hover" id='myTable'>
+                        <thead>
+                            <th>ID</th>
+                            <th>qradar ID</th>
+                            <th>NAME</th>
+                            <th>OWNER</th>
+                        </thead>
+                       
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.sticky.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="http://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+
+
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        ajax: '/qradar',
+        columns: [
+          {data: 'id', orderable: true},
+          {data: 'qr_id', searchable: false},
+          {data: 'name', orderable: true, searchable: true},
+          {data: 'owner', orderable: true, searchable: true}
+        ],
+      });
+    });
+
+
+
+
+
+        // $(document).ready( function () {
+        // $('#myTable').DataTable();
+        // } );
+    </script>
+</body>
+
+</html>
