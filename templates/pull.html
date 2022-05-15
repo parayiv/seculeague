@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+
+{% block title %} Pull DB From IBM {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem; margin-bottom:5rem;">
+            <div class="col md-10 ml-md-auto">
+              {% if qp  %}
+                <div class="container">
+                    <h3>CURRENTLY; in local DB; we have the listed info:</h3>
+
+                    <ul>
+                        <li>Total Num of Use Case in Qradar: {{qp['NQr']['Total']}}</li>
+                        <li>Total Num of Use Case in Qradar 'Flow' Type : {{qp['NQr']['Flow']}}</li>
+                        <li>Total Num of Use Case in Qradar 'Event' Type: {{qp['NQr']['Event']}}</li>
+                    </ul>
+                  </div>
+                {% endif %}
+
+                    <div class="jumbotron">
+                        <div class="container">
+                          <h1 class="display-6">Pull qradar DATABASE from IBM Site</h1>
+                          <p>This will pull the qradar database from the site <a href="www.ibm.com">IBM</a> and try to get all the <b>New USE CASES</b> if there is updated use cases.</p>
+                          <p><a class="btn btn-primary btn-sm" href="/pulled" role="button">PULL DB</a></p>
+                        </div>
+                      </div>
+    
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}

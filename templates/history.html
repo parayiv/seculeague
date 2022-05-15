@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} History{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem; margin-bottom:10em;">
+            <div class="col md-10 ml-md-auto">
+                <div class="jumbotron">
+                    <div class="container">
+                      <center><h1 class="display-5">HISTORY VIEW</h1></center>
+                    </div>
+                </div>
+                <div>
+
+                    <table class="table table-hover" id='hiTable'>
+                        <thead>
+                            <th>ID</th>
+                            <th>qradar ID</th>
+                            <th>NAME</th>
+                            <th>TYPE</th>
+                            <th>Creation Date</th>
+                            <th>Modif Date</th>
+                            <th>Deletion Date</th>
+                            <th>TABLE</th>
+                        </thead>
+                       
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block footer %}
+    <script>
+    $(document).ready(function () {
+      $('#hiTable').DataTable({
+        ajax: '/history/api',
+        "pageLength": 10,
+        columns: [
+          {data: 'id', orderable: true},
+          {data: 'qr_id', orderable: true, searchable: true},
+          {data: 'name', orderable: true, searchable: true},
+          {data: 'TYPE', orderable: true, searchable: true},
+          {data: 'creation_date', orderable: true, searchable: true},
+          {data: 'modification_date', orderable: true, searchable: true},
+          {data: 'deletion_date', orderable: true, searchable: true},
+          {data: 'previous_tbl', orderable: true, searchable: true}
+        ],
+      });
+    });
+
+    </script>
+
+{% endblock %}

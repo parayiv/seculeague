@@ -1,213 +1,107 @@
-<!doctype html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% block title %} SECULEAGUE{% endblock %}
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-
-    <!-- Style -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
-
-    <!-- DATATABLES -->
-    <link rel=" stylesheet" href="http://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
-    <title>SECULEAGUE USE CASE MANAGER</title>
-
-    <style>
-        table {
-            font-size: 0.9em;
-            font-family: 'Open Sans';
-        }
-
-        th {
-            background: rgb(120, 176, 212);
-            position: sticky;
-            top: 3.8rem;
-            /* Don't forget this, required for the stickiness */
-            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-        }
-
-        tbody {
-            background-color: #e9f6fc;
-        }
-    </style>
-
-
-</head>
-
-<body>
-
-
-    <div class="site-mobile-menu site-navbar-target">
-        <div class="site-mobile-menu-header">
-            <div class="site-mobile-menu-close mt-3">
-                <span class="icon-close2 js-menu-toggle"></span>
-            </div>
-        </div>
-        <div class="site-mobile-menu-body"></div>
-    </div>
-
-
-    <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
-
-        <div class="container">
-            <div class="row align-items-center">
-
-                <div class="col-6 col-xl-2">
-                    <h1 class="mb-0 site-logo"><a href="index.html">Brand<span class="text-primary">.</span> </a></h1>
-                </div>
-
-                <div class="col-12 col-md-10 d-none d-xl-block">
-                    <nav class="site-navigation position-relative text-right" role="navigation">
-
-                        <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                            <li><a href="/home" class="nav-link">Home</a></li>
-                            <li><a href="/qradar" class="nav-link">Qradar</a></li>
-                            <li><a href="/pull_qr" class="nav-link">Pull QR</a></li>
-                            <li><a href="/seculeague" class="nav-link">Seculeague</a></li>
-                            <li><a href="/history" class="nav-link">History</a></li>
-                            <li><a href="/about" class="nav-link">About</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
-    </br>
-
+{% block body %}
     <div class="container">
-        <div class="row" style="margin-top:5rem;  padding-top:5rem;">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem;  margin-bottom:5rem;" >
             <div class="col md-10 ml-md-auto">
-                <select name="search_filter" id="search_filter" class="form-control">
-                    {% for row in db_tables %}
-                    <option value="{{row}}">{{row}}</option>';
-                    {% endfor %}
-                </select>
-                <input type="hidden" name="hidden_value" id="hidden_value" />
-                <div style="clear:both"></div>
-                <br />
-                <div class="jumbotron p-3">
-                    <h2>Manage <b>Use Case </b> <button type="button" class="btn btn-success float-right"
-                            data-toggle="modal" data-target="#mymodal">Add New Entry</button> </h2>
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="alert alert-success alert-dismissable" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                            <span aria-hidden="true">x</span>
-                        </button>
-                        {{message}}
+                <div class="jumbotron">
+                    <div class="container">
+                      <center><h1 class="display-5">SECULEAGUE TABLE</h1></center>
                     </div>
-                    {% endfor %}
-                    {% endif %}
-                    {% endwith %}
-                    <table class="table table-hover" id='seTable'>
+                </div>
+                <div>
+
+                    <table class="table table-hover" id='sTable'>
                         <thead>
-                            <th>ID</th>
-                            <th>QR_ID</th>
-                            <th>NAME</th>
-                            <th>ORIGIN</th>
-                            <th>OWNER</th>
-                            <th>ACTIONS</th>
+                            <th style="width:50px;">ID</th>
+                            <th style="width:80px;">QR ID</th>
+                            <th style="width:80px;">SL ID</th>
+                            <th style="width:300px;">NAME</th>
+                            <th style="width:75px;">TYPE</th>
+                            <th style="width:155px;">CREATION DATE</th>
+                            <th style="width:155px;">MODIFICATION DATE</th>
+                            <th style="width:100px;">PREV TABLE</th>
+                            <th>COMMENT</th>
                         </thead>
-
-                        <tbody>
-
-
-                        </tbody>
-
+                       
                     </table>
 
-
-
                 </div>
-                <!-- Modal Add USE CASE-->
-                <div id="mymodal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Add ENTRY</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form action="{{url_for('insert')}}" method="POST">
-                                    <div class="form-group">
-                                        <label>Name:</label>
-                                        <input type="text" class="form-control" name="name" required="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Type:</label>
-                                        <input type="text" class="form-control" name="type" required="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Enabled:</label>
-                                        <input type="text" class="form-control" name="enabled" required="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Origin:</label>
-                                        <input type="text" class="form-control" name="origin" required="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Add Entry</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
 
             </div>
         </div>
     </div>
-
-
-    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.sticky.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="http://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    {% endblock %}
+    {% block footer %}
     <script>
-        $(document).ready(function () {
-            
-            load_data();
+    $(document).ready(function () {
+      $('#sTable').DataTable({
+        ajax: '/seculeague/api',
+        "pageLength": 25,
+        columns: [
+          {data: 'id', orderable: true},
+          {data: 'qr_id', orderable: true, searchable: true},
+          {data: 'sl_id', orderable: true, searchable: true},
+          {data: 'name', orderable: true, searchable: true},
+          {data: 'TYPE', orderable: true, searchable: true},
+          {data: 'creation_date', orderable: true, searchable: false},
+          {data: 'modification_date', orderable: true, searchable: false},
+          {data: 'previous_tbl', orderable: true, searchable: true},
+          {data: 'comment', orderable: false, searchable: false}
+        ],
+      });
+    });
 
-            function load_data(query = '') {
-                $.ajax({
-                    url: "/fetchrecords",
-                    method: "POST",
-                    data: {
-                        query: query,
-                    },
-                    success: function (data) {
-                        $('tbody').html(data);
-                        $('tbody').append(data.htmlresponse);
+        // Show Input element
+        $('.edit').click(function () {
+            $('.txtedit').hide();
+            $(this).next('.txtedit').show().focus();
+            $(this).hide();
+        });
+
+        // Save data
+        $(".txtedit").focusout(function () {
+
+            // Get edit id, field name and value
+            var id = this.id;
+            var split_id = id.split("-");
+            var field_name = split_id[0];
+            var query = split_id[1];
+            var edit_id = split_id[2];
+            var value = $(this).val();
+
+            // Hide Input element
+            $(this).hide();
+
+            // Hide and Change Text of the container with input elmeent
+            $(this).prev('.edit').show();
+            $(this).prev('.edit').text(value);
+
+            $.ajax({
+                url: '/update',
+                type: 'post',
+                data: {
+                    field: field_name,
+                    value: value,
+                    id: edit_id,
+                    query: query
+                },
+                success: function (response) {
+                    if (response == 1) {
+                        console.log('Save successfully');
+                    } else {
+                        console.log("Not saved.");
                     }
-                })
-            }
-
-            $('#search_filter').change(function () {
-                $('#hidden_value').val($('#search_filter').val());
-                var query = $('#hidden_value').val();
-                load_data(query);
+                }
             });
 
         });
-    </script>
-</body>
 
-</html>
+
+
+
+    </script>
+
+{% endblock %}

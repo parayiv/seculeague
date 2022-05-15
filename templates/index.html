@@ -1,80 +1,84 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
+{% extends 'base.html' %}
 
-    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+{% block title %} Seculeague Home{% endblock %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    
-    <!-- Style -->
-    <link rel="stylesheet" href="static/css/style.css">
+{% block body %}
+    <div class="container">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem;">
+            <div class="col md-10 ml-md-auto">
 
-    <title>SECULEAGUE USE CASE MANAGER</title>
-  </head>
-  <body>
+                <div>
 
+                    <table class="table table-hover" id='myTable'>
+                        <thead>
+                            <th>Number of UC in Seculeague: </th>
+                            <th>{{d['NSe']['Total']}}</th>
+                        </thead>
+                       
+                    </table>
+                  </br>
+                  <p style="text-align: center;">N° OF USE CASES PER TABLE</p>
+                    <table class="table table-hover" id='myTable'>
+                      <thead>
+                          <th>Table</th>
+                          <th>Qradar</th>
+                          <th>Added UC</th>
+                          <th>Seculeague</th>
+                          <th>QrMinusSl</th>
+                          <th>SlMinusQr</th>
+                          <th>Removed</th>
+                          <th>History</th>
+                      </thead>
+                     <tbody>
+                        <tr>
+                          <td>Total</td>
+                          <td style="text-align: center;">{{d['NQr']['Total']}}</td>
+                          <td style="text-align: center;">{{d['NNe']['Total']}}</td>
+                          <td style="text-align: center;">{{d['NSe']['Total']}}</td>
+                          <td style="text-align: center;">{{d['NQrsl']['Total']}}</td>
+                          <td style="text-align: center;">{{d['NSlqr']['Total']}}</td>
+                          <td style="text-align: center;">{{d['NRe']['Total']}}</td>
+                          <td style="text-align: center;">{{d['NHi']['Total']}}</td>
+                        </tr>
+                        <tr>
+                          <td>Event</td>
+                          <td style="text-align: center;">{{d['NQr']['Event']}}</td>
+                          <td style="text-align: center;">{{d['NNe']['Event']}}</td>
+                          <td style="text-align: center;">{{d['NSe']['Event']}}</td>
+                          <td style="text-align: center;">{{d['NQrsl']['Event']}}</td>
+                          <td style="text-align: center;">{{d['NSlqr']['Event']}}</td>
+                          <td style="text-align: center;">{{d['NRe']['Event']}}</td>
+                          <td style="text-align: center;">{{d['NHi']['Event']}}</td>
+                          
+                        </tr>
+                        <tr>
+                          <td>Flow</td>
+                          <td style="text-align: center;">{{d['NQr']['Flow']}}</td>
+                          <td style="text-align: center;">{{d['NNe']['Flow']}}</td>
+                          <td style="text-align: center;">{{d['NSe']['Flow']}}</td>
+                          <td style="text-align: center;">{{d['NQrsl']['Flow']}}</td>
+                          <td style="text-align: center;">{{d['NSlqr']['Flow']}}</td>
+                          <td style="text-align: center;">{{d['NRe']['Flow']}}</td>
+                          <td style="text-align: center;">{{d['NHi']['Flow']}}</td>
+                        </tr>
+                        <tr>
+                          <td>COMMON</td>
+                          <td style="text-align: center;">{{d['NQr']['Common']}}</td>
+                          <td style="text-align: center;">{{d['NNe']['Common']}}</td>
+                          <td style="text-align: center;">{{d['NSe']['Common']}}</td>
+                          <td style="text-align: center;">{{d['NQrsl']['Common']}}</td>
+                          <td style="text-align: center;">{{d['NSlqr']['Common']}}</td>
+                          <td style="text-align: center;">{{d['NRe']['Common']}}</td>
+                          <td style="text-align: center;">{{d['NHi']['Common']}}</td>
+                        </tr>
+                        
+                     </tbody>
+                  </table>
+                </div>
 
-    <div class="site-mobile-menu site-navbar-target">
-      <div class="site-mobile-menu-header">
-        <div class="site-mobile-menu-close mt-3">
-          <span class="icon-close2 js-menu-toggle"></span>
+            </div>
         </div>
-      </div>
-      <div class="site-mobile-menu-body"></div>
     </div>
-   
-    
-    <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
 
-      <div class="container">
-        <div class="row align-items-center">
-          
-          <div class="col-6 col-xl-2">
-            <h1 class="mb-0 site-logo"><a href="index.html">Brand<span class="text-primary">.</span> </a></h1>
-          </div>
-
-          <div class="col-12 col-md-10 d-none d-xl-block">
-            <nav class="site-navigation position-relative text-right" role="navigation">
-
-              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                <li><a href="/home" class="nav-link">Home</a></li>
-                <li><a href="/qradar" class="nav-link">Qradar</a></li>
-                <li><a href="/pull_qr" class="nav-link">Pull QR</a></li>
-                <li><a href="/seculeague" class="nav-link">Seculeague</a></li>
-                <li><a href="/history" class="nav-link">History</a></li>
-                <li><a href="/about" class="nav-link">About</a></li>
-              </ul>
-            </nav>
-          </div>
-      </div>
-      <div class="container">
-        <p>
-            <h1 align="center">Seculeague: Manage Use CASE DATABASE</h1>
-        </p>
-
-    </div>
-      
-    </header>
-
-    
-  
-
-  
-    
-    
-
-    <script src="static/js/jquery-3.3.1.min.js"></script>
-    <script src="static/js/popper.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
-    <script src="static/js/jquery.sticky.js"></script>
-    <script src="static/js/main.js"></script>
-  </body>
-</html>
+{% endblock %}

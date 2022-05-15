@@ -1,0 +1,67 @@
+
+{% extends 'base.html' %}
+
+{% block title %} Pulled DB {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem;">
+            <div class="col md-10 ml-md-auto">
+                <div class="container">
+                  {% if NQrChanged_ap == 0 %}
+                  <div>
+                    <div class="jumbotron">
+                      <div class="container">
+                        <h1 class="display-3">No Change in the DATABASE !</h1>
+                        <p>Since the last pull of db.</p>
+                        <p><a class="btn btn-primary btn-lg" href="#" role="button">More info. &raquo;</a></p>
+                      </div>
+                    </div>
+
+                  </div>
+                  {% else %}
+                    <h3>After the pull of the db, we have the listed info:</h3>
+
+                    <div>
+
+                      <table class="table table-hover" id='pullTable'>
+                          <thead>
+                              <th></th>
+                              <th>Before</th>
+                              <th>After</th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Number of records:</td>
+                              <td> {{qp['NQr']['Total']}}</td>
+                              <td> {{qpull['NQr']['Total']}} </td>
+                            </tr>
+                            <tr>
+                              <td>Number of Events:</td>
+                              <td> {{qp['NQr']['Flow']}}</td>
+                              <td> {{qpull['NQr']['Flow']}} </td>
+                            </tr>
+                            <tr>
+                              <td>Number of Flows:</td>
+                              <td> {{qp['NQr']['Event']}}</td>
+                              <td> {{qpull['NQr']['Event']}} </td>
+                            </tr>
+                            <tr>
+                              <td>Number of Changes:</td>
+                              <td> .</td>
+                              <td> {{qpull['NQr']['Change']}} </td>
+                            </tr>
+                          </tbody>
+                      </table>
+  
+                  </div>
+                  {% endif %}
+                  </div>
+
+                    
+    
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}

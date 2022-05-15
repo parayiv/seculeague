@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %} Qradar Database{% endblock %}
+{% block body %}
+<style>
+    
+      /*  EDIT CSS STYLE */
+      .edit {
+          width: 100%;
+          height: 25px;
+      }
+  
+      .editMode {
+          border: 1px solid rgb(128, 44, 44);
+      }
+  
+  
+      table tr:nth-child(1) th {
+          color: white;
+          padding: 10px 0px;
+          letter-spacing: 1px;
+      }
+  
+      table td {
+          padding: 10px;
+      }
+  
+      table tr:nth-child(even) {
+          background-color: lavender;
+          color: black;
+      }
+  
+      .txtedit {
+          display: none;
+          width: 99%;
+          height: 25px;
+      }
+</style>
+    <div class="container">
+        <div class="row" style="margin-top:5rem;  padding-top:5rem;">
+            <div class="col md-10 ml-md-auto">
+                <select name="search_filter" id="search_filter" class="form-control">
+
+                    <option value="News" {{'selected' if query=="News"}}>ADDED UC</option>
+                    <option value="QrMinusSl" {{'selected' if query=="QrMinusSl"}}>UC TO BE TESTED FOR VALIDATION</option>
+                    <option value="SlMinusQr" {{'selected' if query=="SlMinusQr"}}>UC TO BE REVIEWED FROM EXTERNAL SOURCES</option>
+                    <option value="Rmvd" {{'selected' if query=="Rmvd"}}>REMOVED UC</option>
+                    
+                </select>
+                <input type="hidden" name="hidden_value" id="hidden_value" />
+                <div style="clear:both"></div>
+                <br />
+                <div>
+                    <h2>Manage <b>Use Case </b> <button type="button" class="btn btn-success float-right"
+                            data-toggle="modal" data-target="#mymodal">Add New Entry</button> </h2>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissable" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <table class="table table-hover" id='seTable'>
+                        <thead>
+                            <th style="width:50px;">ID</th>
+                            <th style="width:80px;">QR_ID</th>
+                            <th style="width:420px;">NAME</th>
+                            <th style="width:80px;">TYPE</th>
+                            <th style="width:155px;">CREATION DATE</th>
+                            <th>COMMENT</th>
+                            <th style="width:75px;">ACTIONS</th>
+                        </thead>
+
+                        <tbody>
+
+
+                        </tbody>
+
+                    </table>
+
+
+
+                </div>
+                <!-- Modal INSERT USE CASE-->
+                <div id="mymodal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add ENTRY</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url_for('insert')}}" method="POST">
+                                    <div class="form-group">
+                                        <label>Name:</label>
+                                        <input type="text" class="form-control" name="name" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Type:</label>
+                                        <input type="text" class="form-control" name="type" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Enabled:</label>
+                                        <input type="text" class="form-control" name="enabled" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Comment:</label>
+                                        <input type="text" class="form-control" name="comment" required="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Add Entry</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+    {% block footer %}
+
+    <script>
+        $(document).ready(function () {
+            
+            load_data();
+
+            function load_data(query = '') {
+                $.ajax({
+                    url: "/fetchrecords",
+                    method: "POST",
+                    data: {
+                        query: query,
+                    },
+                    success: function (data) {
+                        $('tbody').html(data);
+                        $('tbody').append(data.htmlresponse);
+                    }
+                })
+            }
+
+            $('#search_filter').change(function () {
+                $('#hidden_value').val($('#search_filter').val());
+                var query = $('#hidden_value').val();
+                load_data(query);
+            });
+
+
+        });
+
+
+    </script>
+{% endblock %}

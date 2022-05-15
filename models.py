@@ -1,12 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import secrets
-
+from datetime import datetime
+import random
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 #SqlAlchemy Database Configuration With Mysql
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://parayiv:gaga@192.168.80.6/sldb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://parayiv:gaga@192.168.80.6/SLeagueDB'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
@@ -14,16 +15,17 @@ db = SQLAlchemy(app)
 
 #Creating model table for our CRUD database
 class qradar(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    qr_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qr_id = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     modification_date = db.Column(db.String(100))
+    last_updated = db.Column(db.Time, default=datetime.now().strftime("%Y-%m-%d %H:%M"))
 
     def to_dict(self):
         return {
@@ -36,45 +38,29 @@ class qradar(db.Model):
             'identifier': self.identifier,
             'origin': self.origin,
             'creation_date': self.creation_date,
-            'modification_date': self.modification_date       
+            'modification_date': self.modification_date,
+            'last_updated': self.last_updated   
         }
 
 #track all seculeague use cases: Added/removed/to be commited/
-class seculeague(db.Model):
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    qr_id = db.Column(db.Integer)
-    sl_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+class Seculeague(db.Model):
+    __tablename__ = 'Seculeague'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qr_id = db.Column(db.String(100))         #Note: This must be verified and the sl_id and the name vars default
+    sl_id = db.Column(db.String(100))
+    name = db.Column(db.String(200))
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
-    modification_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    modification_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     status = db.Column(db.String(20))
     count = db.Column(db.Integer)
     comment = db.Column(db.String(100))
-    previous_tbl = db.Column(db.String(20))
-    current_tbl = db.Column(db.String(20))
-    
-    def __init__(self, id, qr_id, sl_id, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date, status, count, comment, previous_tbl, current_tbl):
-        self.id = id
-        self.qr_id = qr_id
-        self.sl_id = sl_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
-        self.status = status
-        self.count = count
-        self.comment = comment
-        self.previous_tbl = previous_tbl
-        self.current_tbl = self.current_tbl
+    previous_tbl = db.Column(db.String(20), default='News')
+    current_tbl = db.Column(db.String(20), default='Seculeague')
 
     def to_dict(self):
         return {
@@ -97,42 +83,25 @@ class seculeague(db.Model):
         }
 
 #Added use cases
-class news(db.Model):
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    qr_id = db.Column(db.Integer)
-    sl_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+class News(db.Model):
+    __tablename__ = 'News'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qr_id = db.Column(db.String(100), default=secrets.token_hex(3))         #Note: This must be verified and the sl_id and the name vars default
+    sl_id = db.Column(db.String(100), default=secrets.token_hex(3))
+    name = db.Column(db.String(200), unique=True)
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
-    modification_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    modification_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     status = db.Column(db.String(20))
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=1)
     comment = db.Column(db.String(100))
-    previous_tbl = db.Column(db.String(20))
-    current_tbl = db.Column(db.String(20))
+    previous_tbl = db.Column(db.String(20), default='Null')
+    current_tbl = db.Column(db.String(20), default='News')
     
-    def __init__(self, id, qr_id, sl_id, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date, status, count, comment, previous_tbl, current_tbl):
-        self.id = id
-        self.qr_id = qr_id
-        self.sl_id = sl_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
-        self.status = status
-        self.count = count
-        self.comment = comment
-        self.previous_tbl = previous_tbl
-        self.current_tbl = self.current_tbl
-
     def to_dict(self):
         return {
             'id': self.id,
@@ -155,42 +124,25 @@ class news(db.Model):
 
 # The use cases That found in qradar but not found in seculeague
 # Need to be traited then commited
-class qr_minus_sl(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    qr_id = db.Column(db.Integer)
-    sl_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+class QrMinusSl(db.Model):
+    __tablename__ = 'QrMinusSl'
+    id = db.Column(db.Integer, autoincrement=True)
+    qr_id = db.Column(db.String(100))         #Note: This must be verified and the sl_id and the name vars default
+    sl_id = db.Column(db.String(100), default=secrets.token_hex(3))
+    name = db.Column(db.String(200), primary_key=True)
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
-    modification_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    modification_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     status = db.Column(db.String(20))
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=1)
     comment = db.Column(db.String(100))
     previous_tbl = db.Column(db.String(20))
-    current_tbl = db.Column(db.String(20))
+    current_tbl = db.Column(db.String(20), default='QrMinusSl')
     
-    def __init__(self, id, qr_id, sl_id, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date, status, count, comment, previous_tbl, current_tbl):
-        self.id = id
-        self.qr_id = qr_id
-        self.sl_id = sl_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
-        self.status = status
-        self.count = count
-        self.comment = comment
-        self.previous_tbl = previous_tbl
-        self.current_tbl = self.current_tbl
-
     def to_dict(self):
         return {
             'id': self.id,
@@ -214,41 +166,24 @@ class qr_minus_sl(db.Model):
 
 # The use cases That found in Seculeague but not found in qradar
 # Need to be reevaluated
-class sl_minus_qr(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    qr_id = db.Column(db.Integer)
-    sl_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+class SlMinusQr(db.Model):
+    __tablename__ = 'SlMinusQr'
+    id = db.Column(db.Integer, autoincrement=True)
+    qr_id = db.Column(db.String(100))         #Note: This must be verified and the sl_id and the name vars default
+    sl_id = db.Column(db.String(100))
+    name = db.Column(db.String(200), primary_key=True,)
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
-    modification_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    modification_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     status = db.Column(db.String(20))
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=1)
     comment = db.Column(db.String(100))
     previous_tbl = db.Column(db.String(20))
-    current_tbl = db.Column(db.String(20))
-    
-    def __init__(self, id, qr_id, sl_id, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date, status, count, comment, previous_tbl, current_tbl):
-        self.id = id
-        self.qr_id = qr_id
-        self.sl_id = sl_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
-        self.status = status
-        self.count = count
-        self.comment = comment
-        self.previous_tbl = previous_tbl
-        self.current_tbl = self.current_tbl
+    current_tbl = db.Column(db.String(20), default='SlMinusQr')
 
     def to_dict(self):
         return {
@@ -271,41 +206,25 @@ class sl_minus_qr(db.Model):
         }
 
 #Removed Use case
-class rmvd(db.Model):   
-    id = db.Column(db.Integer, primary_key=True)
-    qr_id = db.Column(db.Integer)
-    sl_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+class Rmvd(db.Model):
+    __tablename__ = 'Rmvd'   
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qr_id = db.Column(db.String(100))         #Note: This must be verified and the sl_id and the name vars default
+    sl_id = db.Column(db.String(100))
+    name = db.Column(db.String(200))
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
-    modification_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    modification_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    deletion_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     status = db.Column(db.String(20))
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=2)
     comment = db.Column(db.String(100))
     previous_tbl = db.Column(db.String(20))
-    current_tbl = db.Column(db.String(20))
-    
-    def __init__(self, id, qr_id, sl_id, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date, status, count, comment, previous_tbl, current_tbl):
-        self.id = id
-        self.qr_id = qr_id
-        self.sl_id = sl_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
-        self.status = status
-        self.count = count
-        self.comment = comment
-        self.previous_tbl = previous_tbl
-        self.current_tbl = self.current_tbl
+    current_tbl = db.Column(db.String(20), default='Rmvd')
 
     def to_dict(self):
         return {
@@ -319,7 +238,8 @@ class rmvd(db.Model):
             'identifier': self.identifier,
             'origin': self.origin,
             'creation_date': self.creation_date,
-            'modification_date': self.modification_date, 
+            'modification_date': self.modification_date,
+            'deletion_date' : self.deletion_date,
             'status': self.status,
             'count': self.count,
             'comment': self.comment,
@@ -328,42 +248,26 @@ class rmvd(db.Model):
         }
 
 #Track history of the seculeague use case
-class history(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    qr_id = db.Column(db.Integer)
-    sl_id = db.Column(db.Integer)
-    name = db.Column(db.String(100), unique=True)
+class History(db.Model):
+    __tablename__ = 'History'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qr_id = db.Column(db.String(100))         #Note: This must be verified and the sl_id and the name vars default
+    sl_id = db.Column(db.String(100))
+    name = db.Column(db.String(200))
     TYPE = db.Column(db.String(10))
     enabled = db.Column(db.String(20))
     owner = db.Column(db.String(50))
     identifier = db.Column(db.String(100))
     origin = db.Column(db.String(100))
-    creation_date = db.Column(db.String(100))
-    modification_date = db.Column(db.String(100))
+    creation_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    modification_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    deletion_date = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     status = db.Column(db.String(20))
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=2)
     comment = db.Column(db.String(100))
     previous_tbl = db.Column(db.String(20))
-    current_tbl = db.Column(db.String(20))
+    current_tbl = db.Column(db.String(20), default='History')
     
-    def __init__(self, id, qr_id, sl_id, name, TYPE, enabled, owner, identifier, origin, creation_date, modification_date, status, count, comment, previous_tbl, current_tbl):
-        self.id = id
-        self.qr_id = qr_id
-        self.sl_id = sl_id
-        self.name = name
-        self.TYPE = TYPE
-        self.enabled = enabled
-        self.owner = owner
-        self.identifier = identifier
-        self.origin = origin
-        self.creation_date = creation_date
-        self.modification_date = modification_date
-        self.status = status
-        self.count = count
-        self.comment = comment
-        self.previous_tbl = previous_tbl
-        self.current_tbl = self.current_tbl
-
     def to_dict(self):
         return {
             'id': self.id,
@@ -376,7 +280,8 @@ class history(db.Model):
             'identifier': self.identifier,
             'origin': self.origin,
             'creation_date': self.creation_date,
-            'modification_date': self.modification_date, 
+            'modification_date': self.modification_date,
+            'deletion_date': self.deletion_date, 
             'status': self.status,
             'count': self.count,
             'comment': self.comment,
